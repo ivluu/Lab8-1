@@ -39,7 +39,7 @@ describe('Party Horn Tests', () => {
       });
   });
 
-  // Check audio and image for radio
+  // Check audio and audio image
   it('Audio and image is radio when selected', () => {
     cy.get('#radio-air-horn')
       .check();
@@ -85,7 +85,7 @@ describe('Party Horn Tests', () => {
       });
   });
 
-  // Check volume image for increasing volume
+  // Check volume icon
   it('Volume level-0 when vol = 0', () => {
     cy.get('#volume-number')
       .clear()
@@ -128,5 +128,32 @@ describe('Party Horn Tests', () => {
       .then( $el => {
         expect($el).to.have.prop('src', 'http://127.0.0.1:5500/Part2-Cypress/assets/media/icons/volume-level-3.svg');
       });
+  });
+
+  // Test honk button disable
+  it('Honk disabled when input empty', () => {
+    cy.get('#volume-number')
+      .clear()
+      .type(' ');
+
+    cy.get('#honk-btn').should('be.disabled');
+  });
+
+  it('Honk disabled when input is non-number', () => {
+    cy.get('#volume-number')
+      .clear()
+      .type('$');
+
+    cy.get('#honk-btn').should('be.disabled');
+  });
+
+  // Test out of range input
+  it('Error show when number out of range', () => {
+    cy.get('#volume-number')
+      .clear()
+      .type('101');
+
+    cy.get('#volume-number')
+      .then( $el => $el[0].checkValidity()).should('be.false');
   });
 });
